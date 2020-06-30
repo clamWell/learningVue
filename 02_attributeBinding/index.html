@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<title>vue.js and todolist</title>
+	<style>
+		body{  background: #e5e6ea; }
+		.wrap { max-width: 800px; margin: 0 auto; box-sizing: border-box; padding: 30px;  background: #fff;}
+		.wrap > h1 { margin: 0; color: #353a4e;}
+		.each-sec {  display:block; margin: 20px auto; width:100%;box-sizing:border-box; padding: 20px 0; border-bottom: 1px solid #ddd; }
+		.each-sec h3 { font-size: 20px; font-weight: bold; color: #42434a;}
+		.check-vue-print { margin-top: 25px; }
+		.check-vue-print p { font-size: 15px; color:#555;margin: 10px; }
+		#app_list ul { list-style:none;}
+		.class-binding.on { color: red; font-weight: bold;}
+	</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<h1>vue.js and todolist</h1>
+			
+			<div class="each-sec">
+				<h3>#속성 바인딩(Attribute Binding)</h3>
+				<div id="app_attr">
+					<!--<img src="https://picsum.photos/200/200/?image=353" alt="">-->
+					<img v-bind:src="img" alt="">
+					<img :src="img" alt="">
+					<img :src="img" :id="`thumb_${id}`" alt="">
+
+					<div class="style-binding" :style="[divStyle, fontStyle]">
+						<p>style binding with vue.js</p>
+					</div>
+
+					<div class="class-binding" :class="[ownClass, toggleClass]">
+						<p>class value binding with vue.js</p>
+					</div>
+				</div>
+			</div>
+
+			
+		</div>
+		
+  	
+	
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script type="text/javascript">
+			Vue.config.devtools = true
+            var app_attr = new Vue({ 
+                el: '#app_attr',
+                data() {
+					return {
+						img: "https://picsum.photos/200/200/?image=353",
+						id: 1,
+						divStyle: {
+							background: "#111",
+						},
+						fontStyle: {
+							fontSize: "18px",
+							color: "#fff",
+							textAlign: "center"
+						},
+						ownClass: "ownClass",
+						toggleClass: {
+							on: false
+						}
+					}
+                }
+            });
+
+
+        </script>
+    </body>
+</html>
