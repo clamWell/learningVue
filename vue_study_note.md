@@ -1,11 +1,11 @@
 # vue.js & todo-list
 
-### 1. vue.js란? 
+## 1. vue.js란? 
 * MVVM 패턴에서 ViewModel 레이어에 해당하는 화면단 라이브러리이자 프레임워크.
 * 실시간 데이터 바인딩을 제공하고, 화면의 구성 요소들을 컴포넌트 형태로 제공해준다.
 * React, Angular에 이어서 모던 프론트 개발에서 가장 많이 사용되는 프레임워크다.
 
-#### 2. 데이터 바인딩: vue 객체의 데이터와 HTML node의 연결
+## 2. 데이터 바인딩: vue 객체의 데이터와 HTML node의 연결
 
 [app.js]
 ```javascript
@@ -29,12 +29,12 @@
 이것이 Vue의 가장 기본적인 데이터 바인딩 방법이다.
 
 
-#### 3. input 태그와 v-model: v-model 프로퍼티를 이용해 사용자 입력값 가져오기
+## 3. input 태그와 v-model: v-model 프로퍼티를 이용해 사용자 입력값 가져오기
 프론트 개발을 하다보면 폼 태그를 이용해 사용자가 입력한 데이터 값을 가져와 저장하고,  
 이것을 다시 뷰단에 활용하는 작업을 많이 하게 된다.
 일반적인 javascript 개발에서는 이 작업을 다음과 같은 코드로 수행한다.
 
-* A. javascript 방식
+### A. javascript 방식
   
 [index.html]
 ```html
@@ -64,7 +64,7 @@ function userIdChanged(obj){//가져온 값을 다시 HTML node에 반영해주�
 이 경우 사용자 입력값에 변화가 있을 때 마다 두 함수를 실행해줘야 실시간으로 값이 반영된다.
 
 
-* B. Vue 방식
+### B. Vue 방식
 [index.html]
 ```html
 <div id="app_form">
@@ -99,7 +99,7 @@ var app_form = new Vue({
 이를 통해 손 쉽게 사용자가 입력한 값을 가져와 실시간으로 출력하는 것이 가능해진다.
 
 
-#### 4. 데이터로 목록 출력하기
+## 4. 데이터로 목록 출력하기
 개발을 하다보면 데이터를 바탕으로, 목록을 출력하는 일이 잦다. 
 기존 javascript에서는 `for문`, `for-in문`, `forEach` 등을 활용해서 이 작업을 수행했다.
 동일한 작업을 vue의 `v-for` 프로퍼티를 통해 수행할 수 있다.
@@ -152,10 +152,10 @@ var app_list = new Vue({
 `v-for` 속성을 지정해주고 속성값으로 for-in문을 지정.  
 items 변수(배열)값의 각 배열 요소들을 하나씩 가지고와 실행한다.(item = 각 배열의 요소)
   
-#### 5. 태그 속성 바인딩
+## 5. 태그 속성 바인딩
 vue.js를 이용해 HTML 태그의 `src`나 `class`와 같은 속성(attribute)의 값을 유동적으로 변경해 줄 수 있다.  
 
-* (1) v-bind:
+### (1) v-bind:
   
 [index.html]  
 ```html
@@ -181,7 +181,7 @@ HTML 태그와 바인딩 된 vue 객체의 변수명과 속성 값이 연결된�
  });
 ```
   
- * (2) v-bind:id
+### (2) v-bind:id
    
 마찬가지로 이를 이용해 id나 class 값을 변수와 연동하여 유동적으로 적용시켜줄 수 있다.
 
@@ -195,7 +195,7 @@ HTML 태그와 바인딩 된 vue 객체의 변수명과 속성 값이 연결된�
 ES6의 백킷을 활용해 변수명을 적어준다.  
 정상적으로 id 값으로 `thumb_1` 출력됨을 확인할 수 있다.  
 
- * (3) v-bind:style
+### (3) v-bind:style
   
 css 스타일도 변수로 넘겨서 지정이 가능하다.  
 [index.html]  
@@ -255,7 +255,7 @@ css 스타일도 변수로 넘겨서 지정이 가능하다.
 </div>
 ```
 
- * (4) v-bind:class 를 이용해 toggle class 관리하기
+### (4) v-bind:class 를 이용해 toggle class 관리하기
   
 v-bind를 이용해 class를 추가, 삭제하는 것도 유동적으로 가능핟.
 
@@ -288,7 +288,7 @@ v-bind를 이용해 class를 추가, 삭제하는 것도 유동적으로 가능�
 
 > app_attr.toggleClass.on = true;
   
-#### 6. vue 인스턴스 내 메소드 선언
+## 6. vue 인스턴스 내 메소드 선언
 vue에서는 외부에서 사용할 함수들을 methods 라는 json 객체를 만들어 그 안에서 선언해 관리해준다.  
 주의할 점은 선언하는 함수는 화살표 함수를 사용하면 안된다는 점!
   
@@ -379,7 +379,7 @@ var app_method = new Vue({
 </div>
 ```
   
-#### 7. vue 메소드로 특정키 활용과 이벤트 버블링 막기
+## 7. vue 메소드로 특정키 활용과 이벤트 버블링 막기
 vue 메소드를 활용하면 특정키가 눌렸을 때만 메소드를 실행하게 한다거나,  
 이벤트 버블링을 쉽게 막을 수 있다. 
   
@@ -425,7 +425,7 @@ enter 키가 눌렸을 때만 콘솔에 `E N T E R`가 찍힌다.
 </div>
 ```
    
-#### 8. vue.js 컴포넌트
+## 8. vue.js 컴포넌트
 vue.js 컴포넌트는 여러가지 태그를 모아 일종의 사용자 정의(custom) 태그를 만드는 기능이다.  
 반복적으로 사용되는 HTMl 노드와 태그 뭉치를 일일히 하드코딩 해주지 않고,  
 컴포넌트로 모듈화시켜 원할 때 마다 쉽게 가져와 사용하는 방식이라 할 수 있다.  
@@ -457,9 +457,9 @@ Vue.component("product", {
 * 템플릿 스트링 안에서 외부에서 받는 값들이 반영되도록 vue.js 문법을 활용해 변수들을 연결해준다.
 
   
-#### 9. vue.js 를 이용해 Todo list 만들기(vue cli 활용하기)
+## 9. vue.js 를 이용해 Todo list 만들기(vue cli 활용하기)
 
-##### (1) 개발환경 구축하기: vue cli
+#### (1) 개발환경 구축하기: vue cli
 todo list 프로젝트에 앞서 vue cli를 활용하기 위해 터널을 실행하고,  
 디렉토리를 이동해 vue cli를 설치해준다.
 > npm install @vue/cli
@@ -473,22 +473,22 @@ todo list 프로젝트에 앞서 vue cli를 활용하기 위해 터널을 실행
 몇가지 설정값을 확인해주면 vue cli 에서 지원하는 npm 환경의 todo 프로젝트가 설치된다.  
 설치된 파일 디렉토리, 구조를 살펴보자.
   
-*node_modules: 개발에 필요한 패키지들
-*public: 파비콘, index.html(vue.js 아웃팅 결과를 담아줄 HTML node가 위치해있다.)
-*src: assets(이미지등 데이터, 자료), components(익스포팅 해 올 Vue components), main.js(webpack이 파일을 읽어들이는 시작지점)
+* node_modules: 개발에 필요한 패키지들
+* public: 파비콘, index.html(vue.js 아웃팅 결과를 담아줄 HTML node가 위치해있다.)
+* src: assets(이미지등 데이터, 자료), components(익스포팅 해 올 Vue components), main.js(webpack이 파일을 읽어들이는 시작지점)
   
 `package.json`을 확인해보면 설치된 패키지들과 npm script 를 확인할 수 있다.
   
-*serve: 작업을 실시간으로 확인할 수 있도록 로컬 서버 구동
-*build: 개발 완료 후 서버에 올리기 전에 필요한 파일들을 빌드업
-*lint: 문법을 확인 
+* serve: 작업을 실시간으로 확인할 수 있도록 로컬 서버 구동
+* build: 개발 완료 후 서버에 올리기 전에 필요한 파일들을 빌드업
+* lint: 문법을 확인 > 작업을 방해한다. 어떻게든 disable 시켜보자...
   
 이제 로컬 서버를 구동해본다.(작업 디렉토리로 이동해서 실행 할 것)
 > npm run serve
   
 이제 8080포트에서 vue 서버가 대기중이다.
    
-##### (2) 부트스트랩 CDN 연결
+#### (2) 부트스트랩 CDN 연결
 
 원활한 개발을 위해 css preset 을 제공해주는 부트스트랩 소스를 연결해준다.
 ```html
