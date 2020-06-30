@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
-	<title>vue.js and todolist</title>
+	<title>vue.js</title>
 	<style>
 		body{  background: #e5e6ea; }
 		.wrap { max-width: 800px; margin: 0 auto; box-sizing: border-box; padding: 30px;  background: #fff;}
@@ -15,11 +15,15 @@
 		.check-vue-print p { font-size: 15px; color:#555;margin: 10px; }
 		#app_list ul { list-style:none;}
 		.class-binding.on { color: red; font-weight: bold;}
+		.buttonClass { width: 300px; box-sizing:border-box; padding:20px; text-align:center; font-size: 18px;color: #4d4f58; border: 1px solid #111;font-weight: bold;}
+		.method-direct { margin-top: 20px; }
+		.method-direct p { font-size: 20px; }
+		.method-direct p span {  font-weight:bold;}
 	</style>
 	</head>
 	<body>
 		<div class="wrap">
-			<h1>vue.js and todolist</h1>
+			<h1>vue.js Attribute & method</h1>
 			
 			<div class="each-sec">
 				<h3>#속성 바인딩(Attribute Binding)</h3>
@@ -39,7 +43,25 @@
 				</div>
 			</div>
 
-			
+			<div class="each-sec">
+				<h3>#vue 인스턴스 내 메소드 선언</h3>
+				<div id="app_method">
+					<button type="button" :class="[buttonClass]" v-on:click="print">메소드 실행</button>
+					
+					<div class="method-direct">
+						<button type="button" :class="[buttonClass]" @click="add"> counter 변수 값 더하기 </button>
+						<p>COUNTER VALUE: <span>{{ counter }}</span></p>
+					</div>
+				</div>
+			</div>
+
+			<div class="each-sec">
+				<h3>#vue 메소드 활용</h3>
+				<div id="app_keyup">
+					<input type="text" @keyup.enter="keyUp">
+				</div>
+			</div>
+
 		</div>
 		
   	
@@ -69,6 +91,42 @@
                 }
             });
 
+			var app_method = new Vue({ 
+                el: '#app_method',
+                data() {
+					return {
+						counter: 0,
+						buttonClass: "buttonClass",
+					};
+                },
+				methods:{ 
+					print(){
+						console.log(this.counter)
+					},
+					add(){
+						this.counter ++;
+					}
+
+				}
+            });
+
+			var app_keyup = new Vue({ 
+                el: '#app_keyup',
+                data() {
+					return {
+					};
+                },
+				methods:{ 
+					keyUp(e){
+						if(e.keyCode !== 13){
+							console.log("엔터키를 눌러주세요");
+							return;
+						}
+						console.log("E N T E R");
+					}
+
+				}
+            });
 
         </script>
     </body>

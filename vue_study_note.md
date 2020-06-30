@@ -24,17 +24,18 @@
 </div>
 
 ```
-`{{ }}` 중괄호 두개(머스태시) 사이에 변수명을 집어넣으면 vue가 해당 변수를 찾아 출력해준다. 
-여기서는 #app 와 바인딩된 vue 인스턴스의 vueMessage 변수의 값이 리턴된다.  
+`{{ }}` 중괄호 두개(머스태시) 사이에 변수명을 집어넣으면 vue가 해당 변수를 찾아 출력해준다.  
+여기서는 `#app` 와 바인딩된 vue 인스턴스의 `vueMessage` 변수의 값이 리턴된다.  
 이것이 Vue의 가장 기본적인 데이터 바인딩 방법이다.
 
 
 #### 3. input 태그와 v-model: v-model 프로퍼티를 이용해 사용자 입력값 가져오기
-프론트 개발을 하다보면 폼 태그를 이용해 사용자가 입력한 데이터 값을 가져와 저장하고,
+프론트 개발을 하다보면 폼 태그를 이용해 사용자가 입력한 데이터 값을 가져와 저장하고,  
 이것을 다시 뷰단에 활용하는 작업을 많이 하게 된다.
 일반적인 javascript 개발에서는 이 작업을 다음과 같은 코드로 수행한다.
 
-* A. javascript 방식  
+* A. javascript 방식
+  
 [index.html]
 ```html
 <div id="app_form">
@@ -154,7 +155,8 @@ items 변수(배열)값의 각 배열 요소들을 하나씩 가지고와 실행
 #### 5. 태그 속성 바인딩
 vue.js를 이용해 HTML 태그의 `src`나 `class`와 같은 속성(attribute)의 값을 유동적으로 변경해 줄 수 있다.  
 
-* (1) v-bind:   
+* (1) v-bind:
+  
 [index.html]  
 ```html
 <div id="app_attr">
@@ -166,7 +168,7 @@ vue.js를 이용해 HTML 태그의 `src`나 `class`와 같은 속성(attribute)�
 HTML 태그와 바인딩 된 vue 객체의 변수명과 속성 값이 연결된다.
 본래는 `v-ind:src`가 정식 표현이지만 축약표현인 `:src`만 써도 적용이 되는 것.  
   
-[app.js]  
+[app.js]
 ```javascript
  var app_attr = new Vue({ 
 	el: '#app_attr',
@@ -179,7 +181,8 @@ HTML 태그와 바인딩 된 vue 객체의 변수명과 속성 값이 연결된�
  });
 ```
   
- * (2) v-bind:id   
+ * (2) v-bind:id
+   
 마찬가지로 이를 이용해 id나 class 값을 변수와 연동하여 유동적으로 적용시켜줄 수 있다.
 
 [index.html]  
@@ -192,7 +195,8 @@ HTML 태그와 바인딩 된 vue 객체의 변수명과 속성 값이 연결된�
 ES6의 백킷을 활용해 변수명을 적어준다.  
 정상적으로 id 값으로 `thumb_1` 출력됨을 확인할 수 있다.  
 
- * (3) v-bind:style  
+ * (3) v-bind:style
+  
 css 스타일도 변수로 넘겨서 지정이 가능하다.  
 [index.html]  
 ```html
@@ -252,6 +256,7 @@ css 스타일도 변수로 넘겨서 지정이 가능하다.
 ```
 
  * (4) v-bind:class 를 이용해 toggle class 관리하기
+  
 v-bind를 이용해 class를 추가, 삭제하는 것도 유동적으로 가능핟.
 
 [index.html]  
@@ -276,13 +281,220 @@ v-bind를 이용해 class를 추가, 삭제하는 것도 유동적으로 가능�
  });
 ```
   
-바인딩된 html 태그에 `ownClass` 클래스는 추가되었지만, 
-토글 클래스인 `on`은 값이 `false`로 설정되었기 때문에 클래스가 추가되지 않았다.
-이를 `true`값으로 바꿔주면 자동으로 클래스가 추가 되는 것을 확인할 수 있다.
-브라우저 콘솔에서 한번 vue 객체 변수 값을 바꿔보자
+바인딩된 html 태그에 `ownClass` 클래스는 추가되었지만,  
+토글 클래스인 `on`은 값이 `false`로 설정되었기 때문에 클래스가 추가되지 않았다.  
+이를 `true`값으로 바꿔주면 자동으로 클래스가 추가 되는 것을 확인할 수 있다.  
+브라우저 콘솔에서 한번 vue 객체 변수 값을 바꿔보자!
 
->> app_attr.toggleClass.on = true;
+> app_attr.toggleClass.on = true;
   
+#### 6. vue 인스턴스 내 메소드 선언
+vue에서는 외부에서 사용할 함수들을 methods 라는 json 객체를 만들어 그 안에서 선언해 관리해준다.  
+주의할 점은 선언하는 함수는 화살표 함수를 사용하면 안된다는 점!
+  
+HTMl 태그에 `v-on:` 프로퍼티를 설정해줌으로서 vue 인스턴스(객체)와의 메소드 바인딩이 가능하다.
+  
+[index.html]  
+```html
+<div id="app_method">
+	<button type="button" :class="[buttonClass]" v-on:click="print">print 메소드 실행</button>
+</div>
+```
 
+[app.js]  
+```javascript
+var app_method = new Vue({ 
+	el: '#app_method',
+	data() {
+		return {
+			counter: 0,
+			buttonClass: "buttonClass",
+		};
+	},
+	methods:{ 
+		print(){
+			console.log(this.counter)
+		}
+	}
+});
+```
+  
+버튼을 클릭할 때 마다 `add()` 메소드가 실행되고 콘솔에 0이 찍힌다.
+  
+혹은 `v-on:이벤트명` 의 값에 직접적으로 javascript 코드를 넣어서 연산도 가능하다.
 
+[index.html]  
+```html
+<div id="app_method">
+	<div class="method-direct">
+		<button type="button" :class="[buttonClass]" v-on:click=" counter ++; "> counter 변수 값 더하기 </button>
+		<p>COUNTER VALUE: <span>{{ counter }}</span></p>
+	</div>
+</div>
+```
+  
+v-on:click 프로퍼티의 값으로 javascript 코드 `counter ++` 를 넣어줬다.    
+이제 click 이벤트가 발생할 때 마다 `counter ++` 연산작업이 실행된다.  
+하지만 이렇게 직접적으로 코드를 쓰는 것은 가독성이 떨어지기 때문에 보통은  
+메소드 명을 적어주고, vue 인스턴스에 메소드를 선언해준다.
+  
+[index.html]  
+```html
+<div id="app_method">
+	<div class="method-direct">
+		<button type="button" :class="[buttonClass]" v-on:click="add"> counter 변수 값 더하기 </button>
+		<p>COUNTER VALUE: <span>{{ counter }}</span></p>
+	</div>
+</div>
+```
+
+[app.js]  
+```javascript
+var app_method = new Vue({ 
+	el: '#app_method',
+	data() {
+		return {
+			counter: 0,
+			buttonClass: "buttonClass",
+		};
+	},
+	methods:{ 
+		add(){
+			this.counter ++;
+		}
+	}
+});
+```
+  
+`v-on:`도 `v-bind:`의 축약형이 `:`이었던 것 처럼 축약 표현도 있다.
+`@click` 식으로 `@`로 축약해서 표현이 가능하다.
+
+[index.html]  
+```html
+<div id="app_method">
+	<div class="method-direct">
+		<button type="button" :class="[buttonClass]" @click="add"> counter 변수 값 더하기 </button>
+		<p>COUNTER VALUE: <span>{{ counter }}</span></p>
+	</div>
+</div>
+```
+  
+#### 7. vue 메소드로 특정키 활용과 이벤트 버블링 막기
+vue 메소드를 활용하면 특정키가 눌렸을 때만 메소드를 실행하게 한다거나,  
+이벤트 버블링을 쉽게 막을 수 있다. 
+  
+만약 엔터키가 눌렸을 때 특정 코드를 작동시키고 싶다고 한다면,
+일반적으로 다음과 같은 코드를 작성한다.
+  
+[index.html]  
+```html
+<div id="app_keyup">
+	<input type="text" @keyup="keyUp">
+</div>
+```
+  
+[app.js]  
+```javascript
+var app_keyup = new Vue({ 
+	el: '#app_keyup',
+	data() {
+		return {
+		};
+	},
+	methods:{ 
+		keyUp(e){
+			if(e.keyCode !== 13){
+				console.log("엔터키를 눌러주세요");
+				return;
+			}
+			console.log("E N T E R");
+		}
+
+	}
+});
+```
+enter 키가 눌렸을 때만 콘솔에 `E N T E R`가 찍힌다.  
+
+그런데 이 복잡한 코드를 vue에서 더욱 간단하게 쓸 수 있다.
+`@keyup.enter`
+
+[index.html]  
+```html
+<div id="app_keyup">
+	<input type="text" @keyup.enter="keyUp">
+</div>
+```
+   
+#### 8. vue.js 컴포넌트
+vue.js 컴포넌트는 여러가지 태그를 모아 일종의 사용자 정의(custom) 태그를 만드는 기능이다.  
+반복적으로 사용되는 HTMl 노드와 태그 뭉치를 일일히 하드코딩 해주지 않고,  
+컴포넌트로 모듈화시켜 원할 때 마다 쉽게 가져와 사용하는 방식이라 할 수 있다.  
+  
+vue 컴퍼넌트 인스턴스를 생성해주는 방식으로 사용을 시작한다.
+  
+[app.js]  
+```javascript
+
+Vue.component("product", { 
+	props: ['image', 'title', 'desc'],
+	template: `
+		<div class="card">
+			<div class="card-wrap">
+				<div class="thumb">
+					<img :src="image" alt="">
+				</div>
+				<p class="title">{{ title }}</p>
+				<p class="desc">{{ desc }}</p>
+			</div>
+		</div>	
+	`
+}); 
+```
+
+* 첫번째 인자로 태그명을, 두번째 인자로 설정값을 json 형식으로 넘겨준다.  
+* 외부에서 속성값으로 입력받을 항목의 값들을 `props` 안에 배열의 형태로 적어준다.  
+* HTML 태그 뭉치는 template의 값으로 템플릿스트링(백킷) 기능을 활용해 적어준다.
+* 템플릿 스트링 안에서 외부에서 받는 값들이 반영되도록 vue.js 문법을 활용해 변수들을 연결해준다.
+
+  
+#### 9. vue.js 를 이용해 Todo list 만들기(vue cli 활용하기)
+
+##### (1) 개발환경 구축하기: vue cli
+todo list 프로젝트에 앞서 vue cli를 활용하기 위해 터널을 실행하고,  
+디렉토리를 이동해 vue cli를 설치해준다.
+> npm install @vue/cli
+  
+문제 없이 설치가 되었다면 버전을 확인해본다.
+> vue --version
+  
+이제 원하는 작업 디렉토리에서 vue todo 프로젝트를 설치해본다.
+> vue create todo
+
+몇가지 설정값을 확인해주면 vue cli 에서 지원하는 npm 환경의 todo 프로젝트가 설치된다.  
+설치된 파일 디렉토리, 구조를 살펴보자.
+  
+*node_modules: 개발에 필요한 패키지들
+*public: 파비콘, index.html(vue.js 아웃팅 결과를 담아줄 HTML node가 위치해있다.)
+*src: assets(이미지등 데이터, 자료), components(익스포팅 해 올 Vue components), main.js(webpack이 파일을 읽어들이는 시작지점)
+  
+`package.json`을 확인해보면 설치된 패키지들과 npm script 를 확인할 수 있다.
+  
+*serve: 작업을 실시간으로 확인할 수 있도록 로컬 서버 구동
+*build: 개발 완료 후 서버에 올리기 전에 필요한 파일들을 빌드업
+*lint: 문법을 확인 
+  
+이제 로컬 서버를 구동해본다.(작업 디렉토리로 이동해서 실행 할 것)
+> npm run serve
+  
+이제 8080포트에서 vue 서버가 대기중이다.
+   
+##### (2) 부트스트랩 CDN 연결
+
+원활한 개발을 위해 css preset 을 제공해주는 부트스트랩 소스를 연결해준다.
+```html
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+```
+   
+기존 vue 프로젝트에 담겨있던 쓸모 없는 컴포넌트, 코드들은 지워준다.  
+이때 eslint 가 계속 말썽을 부릴 수 있으므로 eslint의 실행을 막아준다.  
 
