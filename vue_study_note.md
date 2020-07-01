@@ -534,7 +534,7 @@ todo list 프로젝트에 앞서 vue cli를 활용하기 위해 터널을 실행
 
 <script>
 
-import Todo from './components/Todo'; //todo button을 외부 컴포넌트로 분리, 모듈화 시켜놓았다. 이를 임포팅 시켜준다.
+import Todo from './components/Todo';
 export default {
 	name: 'app',
 	data(){
@@ -544,34 +544,33 @@ export default {
 			currentState: 'active'
 		};
 	},
-	computed: { // methods 가 아닌 computed 객체 안에 activeTodoList 함수를 위치시킨다. 이렇게 computed안에 선언해줄 경우 html 코드에서 아래 함수를 외부 변수처럼 사용할 수 있게 된다.
-		// 이렇게 computed안에 선언해줄 경우 html 코드에서 아래 함수를 외부 변수처럼 사용할 수 있게 된다. 클래스의 getter함수처럼 동작한다.
-		activeTodoList(){ //목록의 상태 설정과 일치한 목록만 보여주기 위한 filter 함수 적용
+	computed: { 
+		activeTodoList(){
 		    return this.todoList.filter( todo => this.currentState==='all' || todo.state === this.currentState );
 		}
 	},
 	methods:{
-		changeCurrentState(state){ //넘겨 받은 상태로 todo 목록의 상태 설정을 바꿔준다. default 는 active.
+		changeCurrentState(state){
 		    this.currentState = state;
 		},
-		addNewTodo(){ // 사용자 입력값을 데이터 객체로 받아 추가해주는 메소드
+		addNewTodo(){
 		    if(this.userInput !== ""){
 			this.todoList.push({
 			    label: this.userInput,
 			    state: 'active'
 			});
-			this.userInput = ''; //배열에 데이터 객체를 추가한 후에는 사용자 입력 변수를 초기화 시켜준다.
+			this.userInput = ''; 
 		    }
 		},
-		toggleTodoStae(todo){ //인자로 받은 todo객체의 state 속성값을 toggling 해주는 메소드
+		toggleTodoStae(todo){ 
 		    todo.state = todo.state === 'active'? 'done' : 'active' ;
 		},
-		checkActive(todo){ //인자로 받은 todo객체가 active 상태이면 true 반환
+		checkActive(todo){ 
 		  if( todo.state === 'active') return true;
 		}
 	},
 	components: {
-		Todo // 컴포넌트를 선언해준다.
+		Todo 
 	}
 }
 
@@ -619,10 +618,17 @@ computed: {
 > computed 와 method
 > activeTodoList()는 methods 탭이 아닌 computed 탭에 속해있는데, 이는 activeTodoList를 값을 가져오는 getter 함수로 사용하기 위함이다.
 > 기능적으로 activeTodoList() 동일하게 함수로서 작동하나 computed 탭에 속할 경우 아래의 특징을 갖는다.
-> 1. template에서 호출시 ()를 적지 않는다.
-> 2. return 값이 반드시 존재해야한다.
-> 3. 파라미터를 받지 못한다.
-
+> 1. template에서 호출시 ()를 적지 않는다.  
+> 2. return 값이 반드시 존재해야한다.  
+> 3. 파라미터를 받지 못한다.  
+> 일반 메소드의 하위호환 같아 보이는 computed의 함수. 
+> computed 함수는 vue가 비생산적인(쓸데없는) 계산을 하지 않게 해 메모리저하를 막아주는 장점을 갖는다.
+> methods에 정의된 함수들은 자신이 참조하고 있는 데이터 값들이 변하지 않더라도,
+> 화면에 무언가 변화가 일어나면 무조건 실행이 되는 반면 
+> computed 함수들은 자신이 참조한 데이터 값이 변할 때만 실행된다. 
+   
+참고   
+* [계산된 속성 computed, computed vs methods / VueJS Instance / 맨땅에 VueJS](https://medium.com/@hozacho/%EB%A7%A8%EB%95%85%EC%97%90-vuejs-%EA%B3%84%EC%82%B0%EB%90%9C-%EC%86%8D%EC%84%B1-vuejs-instance-computed-93cb6ad7dca9)
 
 #### vue 메소드(Methods)
 * changeCurrentState(state): 넘겨 받은 인자로 목록의 상태 변수인 `currentState`의 값을 바꿔준다. default 는 `active`.
