@@ -459,7 +459,7 @@ Vue.component("product", {
   
 ## 9. vue.js 를 이용해 Todo list 만들기(vue cli 활용하기)
 
-#### (1) 개발환경 구축하기: vue cli
+### (1) 개발환경 구축하기: vue cli
 todo list 프로젝트에 앞서 vue cli를 활용하기 위해 터널을 실행하고,  
 디렉토리를 이동해 vue cli를 설치해준다.
 > npm install @vue/cli
@@ -488,7 +488,7 @@ todo list 프로젝트에 앞서 vue cli를 활용하기 위해 터널을 실행
   
 이제 8080포트에서 vue 서버가 대기중이다.
    
-#### (2) 부트스트랩 CDN 연결
+### (2) 부트스트랩 CDN 연결
 
 원활한 개발을 위해 css preset 을 제공해주는 부트스트랩 소스를 연결해준다.
 ```html
@@ -496,5 +496,136 @@ todo list 프로젝트에 앞서 vue cli를 활용하기 위해 터널을 실행
 ```
    
 기존 vue 프로젝트에 담겨있던 쓸모 없는 컴포넌트, 코드들은 지워준다.  
-이때 eslint 가 계속 말썽을 부릴 수 있으므로 eslint의 실행을 막아준다.  
 
+### (3) vue 코드 작성
+강의를 따라 차례차례 코드를 작성해준다.  
+로컬 서버에서 실시간으로 변경된 화면을 확인해준다.
+
+```vue
+<template>
+    <div id="app">
+        <div class="container">
+	    <div class="col-md-6 offset-md-3">
+    		<h1 class="text-center mb-4">TODO App</h1>
+    		<input type="text" class="form-control" v-model="userInput" @keyup.enter="addNewTodo()">
+
+                <div class="list-group mt-4"> <!--사용자가 입력한 todolist 값을 출력한 div 태그 -->
+                    <template v-for="todo in activeTodoList" > <!-- todolist 배열을 활용해 list 출력. todolist는 현재 상태 설정과 일치하는 배열만 출력해주기 위해 filter 함수를 적용시켜준다.-->
+                        <!--
+                            <Todo :label="todo.label"
+                                @componentClick="toggleTodoStae(todo)"; //모듈화 한 경우
+                                //componentClick은 모듈 내부에서 발생시킨 메소드다.
+                        />-->
+                        <button class="list-group-item text-left" @click="toggleTodoStae(todo)">
+                            {{ todo.label }} <!-- todo 객체의 label 변수 값만 출력해준다. 모듈화 하지 않은 경우 -->
+                        </button>
+                    </template>
+                </div>
+
+                <div class="text-right mt-4">
+                    <button type="button" class="btn btn-sm" @click="changeCurrentState('active')">할 일</button>
+                    <button type="button" class="btn btn-sm" @click="changeCurrentState('done')">완료</button>
+                    <button type="button" class="btn btn-sm" @click="changeCurrentState('all')">전체</button>
+                </div>
+    	    </div>
+        </div>
+    </div>
+</template>
+
+<script>
+
+import Todo from './components/Todo'; //todo button을 외부 컴포넌트로 분리, 모듈화 시켜놓았다. 이를 임포팅 시켜준다.
+export default {
+	name: 'app',
+	data(){
+		return {
+			userInput:'',
+			todoList:[],
+			currentState: 'active'
+		};
+	},
+	computed: { // methods 가 아닌 computed 객체 안에 activeTodoList 함수를 위치시킨다. 이렇게 computed안에 선언해줄 경우 html 코드에서 아래 함수를 외부 변수처럼 사용할 수 있게 된다.
+		// 이렇게 computed안에 선언해줄 경우 html 코드에서 아래 함수를 외부 변수처럼 사용할 수 있게 된다. 클래스의 getter함수처럼 동작한다.
+		activeTodoList(){ //목록의 상태 설정과 일치한 목록만 보여주기 위한 filter 함수 적용
+		    return this.todoList.filter( todo => this.currentState==='all' || todo.state === this.currentState );
+		}
+	},
+	methods:{
+		changeCurrentState(state){ //넘겨 받은 상태로 todo 목록의 상태 설정을 바꿔준다. default 는 active.
+		    this.currentState = state;
+		},
+		addNewTodo(){ // 사용자 입력값을 데이터 객체로 받아 추가해주는 메소드
+		    if(this.userInput !== ""){
+			this.todoList.push({
+			    label: this.userInput,
+			    state: 'active'
+			});
+			this.userInput = ''; //배열에 데이터 객체를 추가한 후에는 사용자 입력 변수를 초기화 시켜준다.
+		    }
+		},
+		toggleTodoStae(todo){ //인자로 받은 todo객체의 state 속성값을 toggling 해주는 메소드
+		    todo.state = todo.state === 'active'? 'done' : 'active' ;
+		},
+		checkActive(todo){ //인자로 받은 todo객체가 active 상태이면 true 반환
+		  if( todo.state === 'active') return true;
+		}
+	},
+	components: {
+		Todo // 컴포넌트를 선언해준다.
+	}
+}
+
+
+</script>
+```
+
+### (4) todolist vue 인스턴스 구조 살펴보기
+
+#### vue 컴포넌트(components)
+```javascript
+import Todo from './components/Todo'; 
+
+components: {
+	Todo 
+}
+```
+* import Todo: 목록으로 출력할 todo 태그들을 외부 컴포넌트로 분리 및 모듈화 시켜놓았다. 이를 임포팅 시켜준다.
+* 임포팅 해온 `Todo` 객체를 vue 인스턴스 안에서 컴포넌트로 사용하겠다고 선언해준다.
+
+#### vue 데이터(data)
+```javascript
+data(){
+	return {
+		userInput:'',
+		todoList:[],
+		currentState: 'active'
+	};
+}
+```
+* userInput: 사용자의 입력 값을 실시간으로 받는 `userInput` 변수. `v-model` 프로퍼티를 통해 폼 태그와 바인딩 되어있다.
+* todoList: 사용자가 입력한 값을 받아와 담아두는 배열. 실제 목록을 출력할 때 참조하는 데이터 목록. 
+* currentState: 목록의 상태를 알려주는 상태 변수 값. `active`가 default.
+
+#### vue 컴퓨티드(Computed)
+```javascript
+computed: { 
+	activeTodoList(){ 
+	    return this.todoList.filter( todo => this.currentState==='all' || todo.state === this.currentState );
+	}
+
+```
+* activeTodoList(): 목록의 상태를 알려주는 변수 `currentState`에 따라서 알맞게 데이터 목록을 반환 해주는 필터 함수. 만약 `currentState`가 `all` 이면 논리연산문이 무조건 참이므로 전체 목록을 반환해주고, `all`이 아닌 경우에는 `currentState`와 일치하는 상태 값을 가진 배열 요소만 반환한다. 
+  
+> computed 와 method
+> activeTodoList()는 methods 탭이 아닌 computed 탭에 속해있는데, 이는 activeTodoList를 값을 가져오는 getter 함수로 사용하기 위함이다.
+> 기능적으로 activeTodoList() 동일하게 함수로서 작동하나 computed 탭에 속할 경우 아래의 특징을 갖는다.
+> 1. template에서 호출시 ()를 적지 않는다.
+> 2. return 값이 반드시 존재해야한다.
+> 3. 파라미터를 받지 못한다.
+
+
+#### vue 메소드(Methods)
+* changeCurrentState(state): 넘겨 받은 인자로 목록의 상태 변수인 `currentState`의 값을 바꿔준다. default 는 `active`.
+* addNewTodo(): 사용자 입력한 값을 `todoList` 배열에 json 요소로 추가해주는 메소드. 배열에 요소를 추가한 후에는 사용자 입력 변수를 초기화 시켜준다.
+* toggleTodoStae(todo): 인자로 받은 todo 객체의 `state` 속성값을 토글링(active⇔done) 해주는 메소드
+* checkActive(todo): 인자로 받은 todo객체의 `state` 속성값이 `active` 인지 아닌지 판별해주는 메소드. `active`면 `true` 반환.
