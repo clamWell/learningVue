@@ -42,6 +42,16 @@
 				</div>
 			</div>
 
+			<div class="each-sec">
+				<h3>#vue 이벤트리스너 v-on</h3>
+				<div id="app_event">
+					<button v-on:click="onClick">클릭</button>
+					<button v-on:dblclick="onDoubleClick">더블클릭</button>
+					<button v-on:mousedown="onMouseDown" v-on:mouseup="onMouseUp">꾸우우욱</button>
+					<input v-on:keyup.enter="pressEnter" v-on:keyup.delete="pressDelete" v-on:keyup.up="pressUp" v-on:keyup.down="pressDown" v-on:keyup.space="pressSpace" placeholder="텍스트를 입력하고 키보드를 조작해보세요">
+				</div>
+			</div>
+
 
 		
 		</div>
@@ -70,6 +80,42 @@
                 data: {
 					aTag: '<a href="www.naver.com">NAVER</a>'
                 }
+            });
+
+			 var app_event = new Vue({ 
+                el: '#app_event',
+                data: {
+					
+                },
+				methods: {
+					onClick(){
+						console.log("you just click the button");
+					},
+					onDoubleClick(){
+						console.log("you just 'DOUBLE' click the button");
+					},
+					onMouseDown(){
+						console.log("you just press down the button");
+					},
+					onMouseUp(){
+						console.log("you just press up the button");
+					},
+					pressEnter(){
+						console.log("ENTER");
+					},
+					pressSpace(){
+						console.log("Space");
+					},
+					pressUp(){
+						console.log("up!");
+					},
+					pressDown(){
+						console.log("down!");
+					},
+					pressDelete(){
+						console.log("delete");
+					}
+				}
             });
 		
 

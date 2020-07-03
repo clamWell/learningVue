@@ -69,6 +69,7 @@ HTML 코드가 data 변수로 선언되어 있을 때,
 	<p>{{ aTag }}</p>
 </div>
 ```
+
 ```javscript
 var app_html = new Vue({ 
 	el: '#app_html',
@@ -78,7 +79,7 @@ var app_html = new Vue({
 });
 ```
 
-결과는? 변수에 담겨 있던 HTMl 태그가 돔 요소가 아닌 문자열로 그대로 출력되어 버린다.
+결과는? 변수에 담겨 있던 HTMl 태그가 돔 요소가 아닌 문자열로 그대로 출력되어 버린다.  
 이때를 위해 사용하는 디렉티브가 바로 `v-html`!
 
 ### v-html 을 사용해보자
@@ -89,3 +90,55 @@ var app_html = new Vue({
 ```
 결과: 정상적으로 p 태그 안에 a 태그가 삽입되었다!
 
+
+## 3. vue 이벤트리스너 v-on: or @
+`v-on:` 디렉티브를 사용하여 돔에 _이벤트리스너_를 추가할 수 있다.  
+`v-on:` 뒤에 이벤트 트리거의 종류를 적어주면 된다. 이때 `v-on:`은 `@`로 축약해서 쓸 수 있다.   
+
+```html
+<div id="app_event">
+	<button v-on:click="onClick">클릭</button>
+	<button v-on:dblclick="onDoubleClick">더블클릭</button>
+	<button v-on:mousedown="onMouseDown" v-on:mouseup="onMouseUp">꾸우우욱</button>
+	<input v-on:keyup.enter="pressEnter" v-on:keyup.delete="pressDelete" v-on:keyup.up="pressUp" v-on:keyup.down="pressDown" v-on:keyup.space="pressSpace" placeholder="텍스트를 입력하고 키보드를 조작해보세요">
+</div>
+```
+
+```javscript
+var app_event = new Vue({ 
+                el: '#app_event',
+                data: {
+					
+                },
+		methods: {
+			onClick(){
+				console.log("you just click the button");
+			},
+			onDoubleClick(){
+				console.log("you just 'DOUBLE' click the button");
+			},
+			onMouseDown(){
+				console.log("you just press down the button");
+			},
+			onMouseUp(){
+				console.log("you just press up the button");
+			},
+			pressEnter(){
+				console.log("ENTER");
+			},
+			pressSpace(){
+				console.log("Space");
+			},
+			pressUp(){
+				console.log("up!");
+			},
+			pressDown(){
+				console.log("down!");
+			},
+			pressDelete(){
+				console.log("delete");
+			}
+		}
+});
+
+```
