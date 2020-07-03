@@ -52,8 +52,37 @@
 				</div>
 			</div>
 
+			<div class="each-sec">
+				<h3>#조건부 렌더링 v-if, v-else</h3>
+				<div id="app_if">
+					<h3>당신의 지금 상태는?</h3>
+					<p v-if="myStatus =='good'">매우 좋아 :)</p>
+					<p v-else>좋지 않아 :(</p>
+					<p v-show="myStatus=='good'">이도저도 모르겠다~</p>
 
-		
+					<button @click="changeStatus">상태 바꾸기</button>
+				</div>
+			</div>
+
+			<div class="each-sec">
+				<h3>#반복 렌더링 v-for</h3>
+				<div id="app_for">
+					<h2>내가 공부해야 할 것들</h2>
+					<ul>
+						<li v-for="(item, i) in studyList" :key="item.object"> {{ (i+1) }}번째 공부: {{ item.object }} (난이도 {{ item.level }}) </li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="each-sec">
+				<h3>#감시자 watch </h3>
+				<div id="app_watch">
+					<h3>캔디 {{ myCandy }} 개</h3>
+					<p>{{ desc }}</p>
+					<button @click="eatCandy">캔디먹기</button>
+				</div>
+			</div>
+	
 		</div>
 		
   	
@@ -118,6 +147,48 @@
 				}
             });
 		
+            var app_if = new Vue({ 
+                el: '#app_if',
+                data: {
+					myStatus: 'good'
+                },
+				methods: {
+					changeStatus(){
+						this.myStatus == 'good' ? this.myStatus = 'bad' : this.myStatus = 'good';
+					}
+				}
+            });
+
+			var app_for = new Vue({ 
+                el: '#app_for',
+                data: {
+					studyList: [
+						{ object: "Vue.js", level: "★★"},
+						{ object: "Node.js", level: "★★★★"},
+						{ object: "Python", level: "★★★"},
+						{ object: "Three.js", level: "★★★★"}
+					] 
+                }
+            });
+
+			var app_watch = new Vue({ 
+				el: '#app_watch',
+				data: {
+					desc: '캔디가 있습니다~',
+					myCandy: 10
+				},
+				methods:{
+					eatCandy(){
+						console.log('냠냠');
+						this.myCandy--;
+					}
+				},
+				watch: {
+					myCandy(newVal, oldVal){
+						this.desc = '캔디의 개수가 ' + oldVal + '개에서 ' + newVal +'개가 되었습니다.' 
+					}
+				}
+			});
 
         </script>
     </body>
