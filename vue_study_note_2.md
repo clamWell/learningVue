@@ -158,7 +158,7 @@ var app_event = new Vue({
 </div>
 ```
 나의 상태를 나타내는 값이 어딘가의 변수로 존재한다고 가정하고,  
-그 변수의 값에 따라 화면에 다음의 두개의 p태그 중 하나만 출력하고 싶다면 어떡해야 할까?
+그 변수의 값에 따라 화면에 다음의 두개의 p태그 중 하나만 출력하고 싶다면 어떡해야 할까?  
 이때 사용하는 것이 `v-if`, `v-else` 이다.
 
 ```html
@@ -221,14 +221,14 @@ var app_for = new Vue({
 	}
  });
 ```
-vue 인스턴스 안에 있는 객체 형태의 데이터 `studyList`를 토대로 공부 목록을 출력하고자 한다.
+vue 인스턴스 안에 있는 객체 형태의 데이터 `studyList`를 토대로 공부 목록을 출력하고자 한다.  
 `v-for` 디렉티브의 기본 문법은 다음과 같다.
 
 ```
 <tagName v-for="item in dataName"> {{ item }} </tagName>
 ```
 dataName이라는 데이터 목록에서 각 요소가 item 로 호출되어서  
-item의 개수만큼 태그가 반복되어 렌더링 된다.
+item의 개수만큼 태그가 반복되어 렌더링 된다.  
 이 문법을 활용해서 위의 예제를 코드로 작성해보면 아래와 같다.
 
 ```html
@@ -263,11 +263,16 @@ item의 개수만큼 태그가 반복되어 렌더링 된다.
 </div>
 ```
 
+### 결과물
+* 1번째 공부: Vue.js (난이도 ★★) 
+* 2번째 공부: Node.js (난이도 ★★★★) 
+* 3번째 공부: Python (난이도 ★★★) 
+* 4번째 공부: Three.js (난이도 ★★★★) 
+
+
 ## 5. 감시자, vue watch
-vue 인스턴스의 속성 `data, methods, computed, watch...` 중  
-`watch`는 한국어로 *감시자*로 번역되는 속성이다.
-watch 함수들은 어원과 동일하게 특정 값의 변화를 감시하고,  
-변화가 있을 경우 정의한 함수를 실행시킨다.
+vue 인스턴스의 속성 `data, methods, computed, watch...` 중 `watch`는 한국어로 *감시자*로 번역되는 속성이다.
+watch 함수들은 어원과 동일하게 특정 값의 변화를 감시하고, 변화가 있을 경우 정의한 함수를 실행시킨다.
 
 ```html
 <div id="app_watch">
@@ -300,11 +305,58 @@ var app_watch = new Vue({
 위의 예제에서 button을 클릭할 때 마다 변수 `myCandy`의 값이 변화한다.  
 그리고 동일한 `myCandy`의 이름으로 정의된 `myCandy` *watch 함수*는  
 `myCandy`의 값이 변화할 때 마다 실행되는 함수라고 할 수 있다.  
-이 watch 함수는 해당 변수의 *새로운 값(newVal)*과 *이전 값(oldVal)*을 인자로 받는다.
+이 watch 함수는 해당 변수의 새로운 값(newVal)과 이전 값(oldVal)을 인자로 받는다.
 
 
+## 6. vue의 라이프사이클
+스크립트에서 vue 인스턴스를 선언하게되면 vue 인스턴스가 생성되는데,  
+이 생성과정에서 vue 인스턴스는 미리 사전에 정의된 몇 단계의 과정을 거치게 된다.  
+이를 라이프사이클(lifecycle)이라 한다!  
+  
+Vue는 각 라이프사이클 단계에서 사용자들이 어떠한 코드 작용,  
+훅(hook)을 할 수 있도록 API를 제공해준다.  
+vue의 라이프사이클은 크게 Create > Mount > Update > destroy 4 단계를 거친다.  
+이 라이프사이클의 과정에서 사용할 수 있는 API 종류는 다음과 같다.  
 
+#### vue lifeCycle hook API
+* beforeCreate
+* created
+* beforeMount
+* mounted
+* beforeUpdate
+* updated
+* beforeDestroy
+* destroyed
 
+이 중 많이 사용하는 것을 실제로 예제로 사용해본다.
+
+```javascript
+var vm = new Vue({ 
+	el: '#app',
+	data: {
+		title: 'vue life cycle'
+	},
+	beforeCreate (){ //가장 먼저 실행되는 훅. data와 event 등이 아직 세팅되지 않았다.
+		console.log("can't use Data, events also this.$el");
+	},
+	created() { //vue 인스턴스가 생성됐다. data와 events가 활성화되어 접근할 수 있다. 그러나 아직 템플릿, 가상돔과는 마운트 및 렌더링이 진행되지 않았다. 돔에는 접근할 수 없다.
+		console.log("can use Data, events! but not yet dom elements this.$el");
+	},  
+	beforeMount() { //첫 렌더링(출력)이 일어나기 직전 훅이다. 대부분의 경우 사용하지 않는 것이 좋다.
+		console.log("this.$el doesn't exist yet, but it will soon!")
+	},
+	mounted() {//가상돔과 마운팅 되는 단계의 훅. 컴포넌트, 템플릿, 렌더링된 돔에 접근할 수 있다.
+		console.log("can use this.$el!") 
+		console.log(this.$el.textContent); 
+	},
+	updated() { //이 훅은 컴포넌트의 데이터가 변하여 재 렌더링이 일어난 후에 실행된다.
+		console.log("just updated!")	
+	}
+});
+
+```
+
+* [지그재그의 개발 블로그](https://wormwlrm.github.io/2018/12/29/Understanding-Vue-Lifecycle-hooks.html)
 
 
 

@@ -82,7 +82,6 @@
 					<button @click="eatCandy">캔디먹기</button>
 				</div>
 			</div>
-	
 		</div>
 		
   	
@@ -100,6 +99,22 @@
 						this.title = 'text will be chage into this message if methods are being active!';
 						return this.title;
 					}
+				},
+				beforeCreate (){ //가장 먼저 실행되는 훅. data와 event 등이 아직 세팅되지 않았다.
+					console.log("can't use Data, events also this.$el");
+				},
+				created() { //vue 인스턴스가 생성됐다. data와 events가 활성화되어 접근할 수 있다. 그러나 아직 템플릿, 가상돔과는 마운트 및 렌더링이 진행되지 않았다. 돔에는 접근할 수 없다.
+					console.log("can use Data, events! but not yet dom elements this.$el");
+				},  
+				beforeMount() { //첫 렌더링(출력)이 일어나기 직전 훅이다. 대부분의 경우 사용하지 않는 것이 좋다.
+					console.log("this.$el doesn't exist yet, but it will soon!")
+				},
+				mounted() {//가상돔과 마운팅 되는 단계의 훅. 컴포넌트, 템플릿, 렌더링된 돔에 접근할 수 있다.
+					console.log("can use this.$el!") 
+					console.log(this.$el.textContent); 
+				},
+				updated() { //이 훅은 컴포넌트의 데이터가 변하여 재 렌더링이 일어난 후에 실행된다.
+					console.log("just updated!")	
 				}
 
             });
@@ -156,6 +171,9 @@
 					changeStatus(){
 						this.myStatus == 'good' ? this.myStatus = 'bad' : this.myStatus = 'good';
 					}
+				},
+				updated() { //이 훅은 컴포넌트의 데이터가 변하여 재 렌더링이 일어나 후에 실행
+					console.log("just updated!")	
 				}
             });
 
