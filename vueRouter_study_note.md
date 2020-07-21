@@ -47,6 +47,15 @@ App running at:
 
 `main.js`에서는 vue를 활용해 최종 화면인 `App.vue` 컴포넌트를 `index.html`에 있는 `#app`태그에 바인딩해주었다. 이제 대부분의 작업은 `App.vue` 와 `router.js` 등에서 이루어진다.
 
+`App.vue`의 html 태그 중에 `<router-view>`가 보이는데 이 태그가 바로 vue 라우터에게 조합한 컴퍼넌트, 태그 내용물을 뿌려 줄 공간임을 알려주는 태그다.
+
+```
+<router-view> <!--vue router 야 이곳에 뿌려줘 --></router-view>
+```
+
+이제 해당 태그 내부에는 라우팅을 통해 분기된 화면들이 보여질 예정이다.
+
+
 #### 📌 router.js 살펴보기  
 `router.js`는 vue 라우팅 기능을 구현하기 위한 소스들이 적혀있는 스크립트 파일이다.
 파일을 열어보면 구조가 다음과 같다.
@@ -111,4 +120,94 @@ export default new Router({
 
 반면 about 컴포넌트는 함수로 호출이 되었기 때문에 페이지가 로딩이 되었을 때도 아직 불러와지지 않다가 주소창에 about이 입력되면 그제서야 함수를 통해 호출이 된다. 이러한 방식을 통해 이후에도 vue 라우터는 주소값이 바뀌면 필요한 컴포넌트들을 그때 그때 불러와 사용할 수 있게 된다. 결과적으로 훨씬 더 빠르게 화면을 로드하는 것이 가능해진다.
 
+#### 📌 router 의 작동
+이제 실제 로컬버서로 가서 주소창에 세부 주소를 입력해보자!
+localhost:8080/home 을 입력하면  `<router-view>`태그 내부에 home 컴포넌트에 해당하는 화면이,
+localhost:8080/about을 입력하면 about 컴포넌트에 해당하는 화면이 보임을 알 수 있다.
+
 -----------------------------
+
+## 3. vue 라우터에 접근하기
+
+#### 📌 $router
+다음으로 만약 네비게이션에서 클릭을 통해 vue 라우터 주소(path)를 변경해주고 싶으면 어떡할까? vue 라우터에 접근해 조작이 필요할 때는 `$router` 접근자를 사용한다.
+
+그리고 router의 주소창을 바꾸고 싶을때는 `.push()` 메소드를 이용한다. router에 어떤 값을 밀어넣겠다는 의미다.
+
+```html
+<v-list-tile @click="$router.push({name:'/home'})">
+  <v-list-tile-content>
+    <v-list-tile-title>Home</v-list-tile-title>
+  </v-list-tile-content>
+</v-list-tile>
+<v-list-tile @click="$router.push({name:'/about'})">
+  <v-list-tile-content>
+    <v-list-tile-title>Home</v-list-tile-title>
+  </v-list-tile-content>
+</v-list-tile>
+```
+
+vue 이벤트리스너 `@`를 통해 리스트 아이템을 클릭하면 vue router에 새로운 name 객체를 전달하도록 한다. 물론 이때 객체 형태가 아닌 value 값만 써줘도 작동한다.
+```JavaScript
+$router.push('/home')
+```
+
+그럼에도 굳이 객체형태로 작성을 해주는 이유는,
+이렇게 객체형태로 쓰게 될 경우 추후 name 값을 라우터에 전달할 때 쿼리나, 파라미터 값도 같이 전달을 할 수 있기 때문이다.
+
+```JavaScript
+@click="$router.push({name:'/about'}, query: {}, params: {})"
+```
+
+#### 📌 router-link
+ <router-link></router-link> 태그를 써주면 vue 라우터는 a태그, 링크를 생성해 준다.
+ ```html
+ <router-link :to="{ name: 'home'}">
+      <p>이걸 클릭하면 home으로 이동</p>
+ </router-link>
+ ```
+router-link 태그에서 `v-bind:to` 디렉티브의 값으로 새로운 name 객체를 전달해줄 수 있다.
+이렇게 작성된 태그는 렌더링된 화면에서는
+```html
+<a href="/" class="router-link-active"><p>이걸 클릭하면 home으로 이동</p></a>
+```
+위에 처럼 a태그로 변환되어서 보인다.
+
+router-link 태그를 이용해 기존의 네비게이션 코드 부분을 수정해준다.
+```html
+<v-list-tile router :to="{name: 'home'}" exact>
+  <v-list-tile-content>
+    <v-list-tile-title>Home</v-list-tile-title>
+  </v-list-tile-content>
+</v-list-tile>
+<v-list-tile router :to="{name: 'about'}" exact>
+  <v-list-tile-content>
+    <v-list-tile-title>About</v-list-tile-title>
+  </v-list-tile-content>
+</v-list-tile>
+```
+🔔 라우터 링크에 부여된 exact 속성
+라우터 링크에 exact 속성 값을 주게되면 예를들어 about의 경우,
+주소창 path가 '/about' 일때 about 라우팅만 동작, '/'를 가리키는 'home'은 동작하지 않음.
+만약 exact 속성 값이 없으면, '/about'의 path 값에 '/'도 포함되게 된다.
+
+-------------------------
+
+## 4. history mode vs hash mode
+vue 라우터의 디폴트 모드는 `hash` 모드다.
+따로 mode 설정을 해주지 않을 경우 `hash` 모드로 동작한다.
+
+`hash` 모드에서는 기본 home 주소가 다음 처럼 `#`뒤에 위치한다.
+```
+http://localhost:8080/#/
+http://localhost:8080/#/about/
+```
+
+그러나 일반적으로 웹의 주소는 이렇게 생기지 않았다..🤨
+그래서 vue router가 제공하는 모드가 `history` 모드.
+다음과 같이 `history` 모드를 설정해주면 우리에게 익숙한 형태로 주소를 분기할 수 있다.
+```javascript
+export default new Router({
+  mode: 'history'
+})
+```
